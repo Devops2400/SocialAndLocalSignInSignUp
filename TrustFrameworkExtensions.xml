@@ -71,12 +71,17 @@
         <DataType>string</DataType>
       </ClaimType>
 
+      <ClaimType Id="headerData">
+        <DisplayName>Header</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
     </ClaimsSchema>
 
   <ClaimsTransformations>
     <ClaimsTransformation Id="GenerateBody" TransformationMethod="GenerateJson">
       <InputClaims>
-        <!-- <InputClaim ClaimTypeReferenceId="displayName" />
+        <InputClaim ClaimTypeReferenceId="displayName" />
         <InputClaim ClaimTypeReferenceId="givenName" />
         <InputClaim ClaimTypeReferenceId="surname" />
         <InputClaim ClaimTypeReferenceId="email" />
@@ -85,16 +90,20 @@
         <InputClaim ClaimTypeReferenceId="country" />
         <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
         <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
-        <InputClaim ClaimTypeReferenceId="objectId" /> -->
-        <InputClaim ClaimTypeReferenceId="Ocp-Apim-Subscription-Key" />
+        <InputClaim ClaimTypeReferenceId="objectId" />
         <!-- Add object ID or a unique identifier that will not change on details update-->
       </InputClaims>
-      <!-- <InputParameters>
-        Update the template_id value with the ID of your SendGrid template.
-        Update with a subject line appropriate for your organization.
-      </InputParameters> -->
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="requestBodyPayload" TransformationClaimType="outputClaim"/>
+      </OutputClaims>
+    </ClaimsTransformation>
+
+    <ClaimsTransformation Id="GenerateHeader" TransformationMethod="GenerateJson">
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="Ocp-Apim-Subscription-Key" />
+      </InputClaims>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="headerData" TransformationClaimType="outputClaim"/>
       </OutputClaims>
     </ClaimsTransformation>
   </ClaimsTransformations>
@@ -311,10 +320,11 @@
             <Item Key="SendClaimsIn">Header</Item>
           </Metadata>
           <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateHeader" />
             <InputClaimsTransformation ReferenceId="GenerateBody" />
           </InputClaimsTransformations>
           <InputClaims>
-              <InputClaim ClaimTypeReferenceId="requestBodyPayload" />
+              <InputClaim ClaimTypeReferenceId="Ocp-Apim-Subscription-Key" />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -422,13 +432,13 @@
         </OrchestrationStep>
 
         <OrchestrationStep Order="8" Type="ClaimsExchange">
-          <Preconditions>
+          <!-- <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
               <Value>isApiCall</Value>
               <Value>true</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
-          </Preconditions>
+          </Preconditions> -->
           <ClaimsExchanges>
             <ClaimsExchange Id="ApiCallExchange" TechnicalProfileReferenceId="ApiCall" />
           </ClaimsExchanges>
