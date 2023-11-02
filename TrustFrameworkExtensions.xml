@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="deuonpoc.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://deuonpoc.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>deuonpoc.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkLocalization</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="extension_Location">
+        <DisplayName>Where are you joining us from?</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>RadioSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Home student" Value="home" />
+          <Enumeration Text="International student" Value="international" />
+        </Restriction>
+      </ClaimType>
+
+      <ClaimType Id="extension_CommunicationPreferences">
+        <DisplayName>My communication preferences</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Email" Value="email" />
+          <Enumeration Text="Text/SMS" Value="text" />
+        </Restriction>
+      </ClaimType>
+
+      <ClaimType Id="postalCode">
+      <DisplayName>Postcode</DisplayName>
+      <DataType>string</DataType>
+      <UserHelpText>Enter your postal code (e.g., ZIP code).</UserHelpText>
+      <UserInputType>TextBox</UserInputType>
+    </ClaimType>
+      
+      <ClaimType Id="country">
+        <DisplayName>Country/Region</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Enter your country of residence.</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="extension_PhoneNumber">
+        <DisplayName>Mobile</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Enter your phone number.</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+
+      <ClaimType Id="isForgotPassword">
+        <DisplayName>isForgotPassword</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
+      </ClaimType>
+  
+      <ClaimType Id="Ocp-Apim-Subscription-Key">
+        <DisplayName>0b7f5f9813f2437cb6555ee6d5f8dc7c</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+      <ClaimType Id="requestBodyPayload">
+        <DisplayName>Payload</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+    </ClaimsSchema>
+
+  <ClaimsTransformations>
+    <ClaimsTransformation Id="GenerateBody" TransformationMethod="GenerateJson">
+      <InputClaims>
+        <!-- <InputClaim ClaimTypeReferenceId="displayName" />
+        <InputClaim ClaimTypeReferenceId="givenName" />
+        <InputClaim ClaimTypeReferenceId="surname" />
+        <InputClaim ClaimTypeReferenceId="email" />
+        <InputClaim ClaimTypeReferenceId="extension_Location" />
+        <InputClaim ClaimTypeReferenceId="postalCode" />
+        <InputClaim ClaimTypeReferenceId="country" />
+        <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
+        <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+        <InputClaim ClaimTypeReferenceId="objectId" /> -->
+        <InputClaim ClaimTypeReferenceId="Ocp-Apim-Subscription-Key" />
+        <!-- Add object ID or a unique identifier that will not change on details update-->
+      </InputClaims>
+      <!-- <InputParameters>
+        Update the template_id value with the ID of your SendGrid template.
+        Update with a subject line appropriate for your organization.
+      </InputParameters> -->
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="requestBodyPayload" TransformationClaimType="outputClaim"/>
+      </OutputClaims>
+    </ClaimsTransformation>
+  </ClaimsTransformations>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH">
+          <Metadata>
+            <Item Key="client_id">159365647241206</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+         <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">3529f859-8aa8-4cdf-ba86-17378ea47302</Item>
+            <Item Key="IdTokenAudience">f3b146ba-8b3f-4a05-9c1b-2b70af458416</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="3529f859-8aa8-4cdf-ba86-17378ea47302" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="f3b146ba-8b3f-4a05-9c1b-2b70af458416" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <!--Local account sign-up page-->
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <Metadata>
+            <Item Key="EnforceEmailVerification">false</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="displayName" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="givenName" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="surName" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="extension_Location" Required="false"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="country" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" Required="false"/>
+            <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" Required="true"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="ForgotPassword">
+          <DisplayName>Forgot your password?</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="true" AlwaysUseDefaultValue="true"/>
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <Metadata>
+            <Item Key="setting.forgotPasswordLinkOverride">ForgotPasswordExchange</Item>
+          </Metadata>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <!--Federated account first-time sign-in page-->
+        <TechnicalProfile Id="SelfAsserted-Social">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="extension_Location" />
+            <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
+            <InputClaim ClaimTypeReferenceId="postalCode" />
+            <InputClaim ClaimTypeReferenceId="country" />
+            <InputClaim ClaimTypeReferenceId="extension_PhoneNumber"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName"/>
+            <OutputClaim ClaimTypeReferenceId="givenName"/>
+            <OutputClaim ClaimTypeReferenceId="surname"/>
+            <OutputClaim ClaimTypeReferenceId="extension_Location"/>
+            <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode"/>
+            <OutputClaim ClaimTypeReferenceId="country" />
+            <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <!--Edit profile page-->
+        <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="extension_Location" />
+            <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
+            <InputClaim ClaimTypeReferenceId="postalCode" />
+            <InputClaim ClaimTypeReferenceId="country" />
+            <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName"/>
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+            <OutputClaim ClaimTypeReferenceId="extension_Location"/>
+            <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode"/>
+            <OutputClaim ClaimTypeReferenceId="country" />
+            <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-Common">
+          <Metadata>
+            <!--Insert b2c-extensions-app application ID here, for example: 11111111-1111-1111-1111-111111111111-->  
+            <Item Key="ClientId">4cda0b10-8123-4187-a5ee-179f605fa775</Item>
+            <!--Insert b2c-extensions-app application ObjectId here, for example: 22222222-2222-2222-2222-222222222222-->
+            <Item Key="ApplicationObjectId">8a8b3394-9704-4482-b656-9bd32046884f</Item>
+          </Metadata>
+        </TechnicalProfile>    
+
+        <!-- Write data during a local account sign-up flow. -->
+        <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="extension_Location"/>
+            <PersistedClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
+            <PersistedClaim ClaimTypeReferenceId="postalCode"/>
+            <PersistedClaim ClaimTypeReferenceId="country"/>
+            <PersistedClaim ClaimTypeReferenceId="extension_PhoneNumber"/>
+          </PersistedClaims>
+        </TechnicalProfile>
+        <!-- Write data during a federated account first-time sign-in flow. -->
+        <TechnicalProfile Id="AAD-UserWriteUsingAlternativeSecurityId">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="extension_Location"/>
+            <PersistedClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
+            <PersistedClaim ClaimTypeReferenceId="postalCode"/>
+            <PersistedClaim ClaimTypeReferenceId="country"/>
+            <PersistedClaim ClaimTypeReferenceId="extension_PhoneNumber"/>
+          </PersistedClaims>
+        </TechnicalProfile>
+        <!-- Write data during edit profile flow. -->
+        <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="extension_Location"/>
+            <PersistedClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
+            <PersistedClaim ClaimTypeReferenceId="postalCode"/>
+            <PersistedClaim ClaimTypeReferenceId="country"/>
+            <PersistedClaim ClaimTypeReferenceId="extension_PhoneNumber"/>
+          </PersistedClaims>
+        </TechnicalProfile>
+        <!-- Read data after user resets the password. -->
+        <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+          <OutputClaims>  
+            <OutputClaim ClaimTypeReferenceId="extension_Location" />
+            <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+            <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <!-- Read data after user authenticates with a local account. -->
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>  
+            <OutputClaim ClaimTypeReferenceId="extension_Location" />
+            <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+            <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <!-- Read data after user authenticates with a federated account. -->
+        <TechnicalProfile Id="AAD-UserReadUsingAlternativeSecurityId">
+          <OutputClaims>  
+            <OutputClaim ClaimTypeReferenceId="extension_Location" />
+            <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+            <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>API call</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ApiCall">
+          <DisplayName>Send user related data to Dynamics</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://api-pre-we-ad365apimanager-1.azure-api.net/dynamics/v4/prospects/UpdateProspectInDynamics</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Header</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateBody" />
+          </InputClaimsTransformations>
+          <InputClaims>
+              <InputClaim ClaimTypeReferenceId="requestBodyPayload" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="CustomSignUpSignIn">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="ForgotPasswordExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+            <ClaimsExchange Id="ForgotPasswordExchange" TechnicalProfileReferenceId="ForgotPassword" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+        <OrchestrationStep Order="3" Type="InvokeSubJourney">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>isForgotPassword</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="PasswordReset" />
+          </JourneyList>
+        </OrchestrationStep>
+        
+        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+            from the user. So, in that case, create the user in the directory if one does not already exist 
+            (verified using objectId which would be set from the last step if account was created in the directory. -->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="8" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>isApiCall</Value>
+              <Value>true</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ApiCallExchange" TechnicalProfileReferenceId="ApiCall" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+        <OrchestrationStep Order="9" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      
+      </OrchestrationSteps>
+       
+
+
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+	</UserJourneys>
+
+  <SubJourneys>
+    <SubJourney Id="PasswordReset" Type="Call">
+      <OrchestrationSteps>
+        <!-- Validate user's email address. -->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Collect and persist a new password. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+    </SubJourney>
+  </SubJourneys>
+
+</TrustFrameworkPolicy>
