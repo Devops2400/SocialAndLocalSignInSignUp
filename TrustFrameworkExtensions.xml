@@ -79,8 +79,9 @@
     </ClaimsSchema>
 
   <ClaimsTransformations>
-    <ClaimsTransformation Id="GenerateBody" TransformationMethod="GenerateJson">
+    <ClaimsTransformation Id="GenerateHeader" TransformationMethod="GenerateJson">
       <InputClaims>
+        <InputClaim ClaimTypeReferenceId="Ocp-Apim-Subscription-Key" />
         <InputClaim ClaimTypeReferenceId="displayName" />
         <InputClaim ClaimTypeReferenceId="givenName" />
         <InputClaim ClaimTypeReferenceId="surname" />
@@ -91,22 +92,12 @@
         <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
         <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
         <InputClaim ClaimTypeReferenceId="objectId" />
-        <!-- Add object ID or a unique identifier that will not change on details update-->
-      </InputClaims>
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="requestBodyPayload" TransformationClaimType="outputClaim"/>
-      </OutputClaims>
-    </ClaimsTransformation>
-
-    <ClaimsTransformation Id="GenerateHeader" TransformationMethod="GenerateJson">
-      <InputClaims>
-        <InputClaim ClaimTypeReferenceId="Ocp-Apim-Subscription-Key" />
       </InputClaims>
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="headerData" TransformationClaimType="outputClaim"/>
       </OutputClaims>
     </ClaimsTransformation>
-  </ClaimsTransformations>
+</ClaimsTransformations>
 
   </BuildingBlocks>
 
@@ -154,11 +145,11 @@
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
             <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
             <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="displayName" Required="true"/>
-            <OutputClaim ClaimTypeReferenceId="givenName" Required="true"/>
-            <OutputClaim ClaimTypeReferenceId="surName" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="displayName" Required="true" PartnerClaimType=""/>
+            <OutputClaim ClaimTypeReferenceId="givenName" Required="true" PartnerClaimType=""/>
+            <OutputClaim ClaimTypeReferenceId="surName" Required="true" PartnerClaimType=""/>
             <OutputClaim ClaimTypeReferenceId="extension_Location" Required="false"/>
-            <OutputClaim ClaimTypeReferenceId="postalCode" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode" Required="true" PartnerClaimType=""/>
             <OutputClaim ClaimTypeReferenceId="country" Required="true"/>
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" Required="false"/>
             <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" Required="true"/>
@@ -309,22 +300,32 @@
     </ClaimsProvider>
 
     <ClaimsProvider>
-      <DisplayName>API call</DisplayName>
+      <DisplayName>FunctionApp call</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="ApiCall">
-          <DisplayName>Send user related data to Dynamics</DisplayName>
+        <TechnicalProfile Id="FunctionAppCall">
+          <DisplayName>Send user related data to Function App</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://api-pre-we-ad365apimanager-1.azure-api.net/dynamics/v4/prospects/UpdateProspectInDynamics</Item>
+            <Item Key="ServiceUrl">https://datacollectionfromb2c.azurewebsites.net</Item>
             <Item Key="AuthenticationType">None</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
             <Item Key="SendClaimsIn">Header</Item>
           </Metadata>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateHeader" />
-            <InputClaimsTransformation ReferenceId="GenerateBody" />
           </InputClaimsTransformations>
           <InputClaims>
               <InputClaim ClaimTypeReferenceId="Ocp-Apim-Subscription-Key" />
+              <InputClaim ClaimTypeReferenceId="displayName" />
+              <InputClaim ClaimTypeReferenceId="givenName" />
+              <InputClaim ClaimTypeReferenceId="surname" />
+              <InputClaim ClaimTypeReferenceId="email" />
+              <InputClaim ClaimTypeReferenceId="extension_Location" />
+              <InputClaim ClaimTypeReferenceId="postalCode" />
+              <InputClaim ClaimTypeReferenceId="country" />
+              <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
+              <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+              <InputClaim ClaimTypeReferenceId="objectId" />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -432,15 +433,15 @@
         </OrchestrationStep>
 
         <OrchestrationStep Order="8" Type="ClaimsExchange">
-          <!-- <Preconditions>
+          <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
               <Value>isApiCall</Value>
               <Value>true</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
-          </Preconditions> -->
+          </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="ApiCallExchange" TechnicalProfileReferenceId="ApiCall" />
+            <ClaimsExchange Id="CollectHeadersExchange" TechnicalProfileReferenceId="ApiCall" />
           </ClaimsExchanges>
         </OrchestrationStep>
         
