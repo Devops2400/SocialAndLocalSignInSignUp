@@ -38,6 +38,11 @@
       <ClaimType Id="postalCode">
       <DisplayName>Postcode</DisplayName>
       <DataType>string</DataType>
+      <DefaultPartnerClaimTypes>
+          <Protocol Name="OAuth2" PartnerClaimType="post_code" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="post_code" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/postcode" />
+      </DefaultPartnerClaimTypes>
       <UserHelpText>Enter your postal code (e.g., ZIP code).</UserHelpText>
       <UserInputType>TextBox</UserInputType>
     </ClaimType>
@@ -62,7 +67,7 @@
       </ClaimType>
   
       <ClaimType Id="Ocp-Apim-Subscription-Key">
-        <DisplayName>0b7f5f9813f2437cb6555ee6d5f8dc7c</DisplayName>
+        <DisplayName>Ocp-Apim-Subscription-Key</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
 
@@ -76,8 +81,8 @@
   <ClaimsTransformations>
     <ClaimsTransformation Id="GenerateBody" TransformationMethod="GenerateJson">
       <InputClaims>
-        <!-- <InputClaim ClaimTypeReferenceId="displayName" />
-        <InputClaim ClaimTypeReferenceId="givenName" />
+        <InputClaim ClaimTypeReferenceId="displayName" />
+        <InputClaim ClaimTypeReferenceId="displayName" />
         <InputClaim ClaimTypeReferenceId="surname" />
         <InputClaim ClaimTypeReferenceId="email" />
         <InputClaim ClaimTypeReferenceId="extension_Location" />
@@ -85,14 +90,8 @@
         <InputClaim ClaimTypeReferenceId="country" />
         <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
         <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
-        <InputClaim ClaimTypeReferenceId="objectId" /> -->
-        <InputClaim ClaimTypeReferenceId="Ocp-Apim-Subscription-Key" />
-        <!-- Add object ID or a unique identifier that will not change on details update-->
+        <InputClaim ClaimTypeReferenceId="objectId" />
       </InputClaims>
-      <!-- <InputParameters>
-        Update the template_id value with the ID of your SendGrid template.
-        Update with a subject line appropriate for your organization.
-      </InputParameters> -->
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="requestBodyPayload" TransformationClaimType="outputClaim"/>
       </OutputClaims>
@@ -146,8 +145,8 @@
             <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
             <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
             <OutputClaim ClaimTypeReferenceId="displayName" Required="true"/>
-            <OutputClaim ClaimTypeReferenceId="givenName" Required="true"/>
-            <OutputClaim ClaimTypeReferenceId="surName" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="displayName" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="surname" Required="true"/>
             <OutputClaim ClaimTypeReferenceId="extension_Location" Required="false"/>
             <OutputClaim ClaimTypeReferenceId="postalCode" Required="true"/>
             <OutputClaim ClaimTypeReferenceId="country" Required="true"/>
@@ -192,7 +191,7 @@
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName"/>
-            <OutputClaim ClaimTypeReferenceId="givenName"/>
+            <OutputClaim ClaimTypeReferenceId="displayName"/>
             <OutputClaim ClaimTypeReferenceId="surname"/>
             <OutputClaim ClaimTypeReferenceId="extension_Location"/>
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
@@ -206,17 +205,17 @@
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="extension_Location" />
             <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
-            <InputClaim ClaimTypeReferenceId="postalCode" />
+            <InputClaim ClaimTypeReferenceId="postalCode"/>
             <InputClaim ClaimTypeReferenceId="country" />
             <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName"/>
-            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
             <OutputClaim ClaimTypeReferenceId="surname" />
             <OutputClaim ClaimTypeReferenceId="extension_Location"/>
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
-            <OutputClaim ClaimTypeReferenceId="postalCode"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode" />
             <OutputClaim ClaimTypeReferenceId="country" />
             <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
           </OutputClaims>
@@ -261,7 +260,7 @@
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="extension_Location"/>
             <PersistedClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
-            <PersistedClaim ClaimTypeReferenceId="postalCode"/>
+            <PersistedClaim ClaimTypeReferenceId="postalCode" />
             <PersistedClaim ClaimTypeReferenceId="country"/>
             <PersistedClaim ClaimTypeReferenceId="extension_PhoneNumber"/>
           </PersistedClaims>
@@ -281,7 +280,7 @@
           <OutputClaims>  
             <OutputClaim ClaimTypeReferenceId="extension_Location" />
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
-            <OutputClaim ClaimTypeReferenceId="postalCode" />
+            <OutputClaim ClaimTypeReferenceId="postalCode"/>
             <OutputClaim ClaimTypeReferenceId="country" />
             <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
           </OutputClaims>
@@ -307,9 +306,12 @@
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ServiceUrl">https://api-pre-we-ad365apimanager-1.azure-api.net/dynamics/v4/prospects/UpdateProspectInDynamics</Item>
-            <Item Key="AuthenticationType">None</Item>
-            <Item Key="SendClaimsIn">Header</Item>
+            <Item Key="AuthenticationType">ApiKeyHeader</Item>
+            <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
+          <CryptographicKeys>
+            <Key Id="Ocp-Apim-Subscription-Key" StorageReferenceId="B2C_1A_RestApiKey" />
+          </CryptographicKeys>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateBody" />
           </InputClaimsTransformations>

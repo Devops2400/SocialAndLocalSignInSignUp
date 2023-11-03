@@ -52,8 +52,8 @@
         <DisplayName>User's Object ID</DisplayName>
         <DataType>string</DataType>
         <DefaultPartnerClaimTypes>
-          <Protocol Name="OAuth2" PartnerClaimType="oid" />
-          <Protocol Name="OpenIdConnect" PartnerClaimType="oid" />
+          <Protocol Name="OAuth2" PartnerClaimType="contant_azure_id" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="contant_azure_id" />
           <Protocol Name="SAML2" PartnerClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier" />
         </DefaultPartnerClaimTypes>
         <UserHelpText>Object identifier (ID) of the user object in Azure AD.</UserHelpText>
@@ -181,9 +181,9 @@
         <DisplayName>Display Name</DisplayName>
         <DataType>string</DataType>
         <DefaultPartnerClaimTypes>
-          <Protocol Name="OAuth2" PartnerClaimType="unique_name" />
-          <Protocol Name="OpenIdConnect" PartnerClaimType="name" />
-          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name" />
+          <Protocol Name="OAuth2" PartnerClaimType="full_name" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="full_name" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/fullname" />
         </DefaultPartnerClaimTypes>
         <UserHelpText>Your display name.</UserHelpText>
         <UserInputType>TextBox</UserInputType>
@@ -296,9 +296,9 @@
         <DisplayName>Given Name</DisplayName>
         <DataType>string</DataType>
         <DefaultPartnerClaimTypes>
-          <Protocol Name="OAuth2" PartnerClaimType="given_name" />
-          <Protocol Name="OpenIdConnect" PartnerClaimType="given_name" />
-          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname" />
+          <Protocol Name="OAuth2" PartnerClaimType="first_name" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="first_name" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/firstname" />
         </DefaultPartnerClaimTypes>
         <UserHelpText>Your given name (also known as first name).</UserHelpText>
         <UserInputType>TextBox</UserInputType>
@@ -308,9 +308,9 @@
         <DisplayName>Surname</DisplayName>
         <DataType>string</DataType>
         <DefaultPartnerClaimTypes>
-          <Protocol Name="OAuth2" PartnerClaimType="family_name" />
-          <Protocol Name="OpenIdConnect" PartnerClaimType="family_name" />
-          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname" />
+          <Protocol Name="OAuth2" PartnerClaimType="last_name" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="last_name" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/lastname" />
         </DefaultPartnerClaimTypes>
         <UserHelpText>Your surname (also known as family name or last name).</UserHelpText>
         <UserInputType>TextBox</UserInputType>
@@ -532,7 +532,7 @@
             <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
             <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="first_name" />
             <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="last_name" />
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="full_name" />
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
             <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
@@ -574,10 +574,10 @@
             <InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca" DefaultValue="1" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="oid" />
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="contant_azure_id" />
             <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
-            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
-            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="first_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="last_name" />
             <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
             <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="upn" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
@@ -898,7 +898,7 @@
             <!-- Optional claims, to be collected from the user -->
             <OutputClaim ClaimTypeReferenceId="displayName" />
             <OutputClaim ClaimTypeReferenceId="givenName" />
-            <OutputClaim ClaimTypeReferenceId="surName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />

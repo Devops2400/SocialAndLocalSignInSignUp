@@ -32,12 +32,12 @@
         <OutputClaim ClaimTypeReferenceId="country" />
         <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
         <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber"/>
-        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="contant_azure_id"/>
         <OutputClaim ClaimTypeReferenceId="identityProvider" />
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
         <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="false" />
       </OutputClaims>
-      <SubjectNamingInfo ClaimType="sub" />
+      <SubjectNamingInfo ClaimType="contant_azure_id" />
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
