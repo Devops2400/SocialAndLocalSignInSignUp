@@ -236,7 +236,7 @@
         <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
           <Metadata>
             <Item Key="setting.forgotPasswordLinkOverride">ForgotPasswordExchange</Item>
-            <Item Key="setting.showSignupLink">false</Item>
+            <Item Key="setting.showSignupLink">true</Item>
           </Metadata>
         </TechnicalProfile>
 
@@ -261,7 +261,7 @@
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName"/>
-            <OutputClaim ClaimTypeReferenceId="displayName"/>
+            <OutputClaim ClaimTypeReferenceId="givenName"/>
             <OutputClaim ClaimTypeReferenceId="surname"/>
             <OutputClaim ClaimTypeReferenceId="extension_Location"/>
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
@@ -281,7 +281,7 @@
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName"/>
-            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
             <OutputClaim ClaimTypeReferenceId="surname" />
             <OutputClaim ClaimTypeReferenceId="extension_Location"/>
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
