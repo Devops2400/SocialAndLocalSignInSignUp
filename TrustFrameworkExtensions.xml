@@ -261,7 +261,7 @@
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName"/>
-            <OutputClaim ClaimTypeReferenceId="displayName"/>
+            <OutputClaim ClaimTypeReferenceId="givenName"/>
             <OutputClaim ClaimTypeReferenceId="surname"/>
             <OutputClaim ClaimTypeReferenceId="extension_Location"/>
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
@@ -301,7 +301,7 @@
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName"/>
-            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
             <OutputClaim ClaimTypeReferenceId="surname" />
             <OutputClaim ClaimTypeReferenceId="extension_Location"/>
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences"/>
