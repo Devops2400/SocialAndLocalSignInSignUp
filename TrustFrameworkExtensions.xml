@@ -214,7 +214,7 @@
             <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
             <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
             <OutputClaim ClaimTypeReferenceId="displayName" Required="true"/>
-            <OutputClaim ClaimTypeReferenceId="displayName" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="givenName" Required="true"/>
             <OutputClaim ClaimTypeReferenceId="surname" Required="true"/>
             <OutputClaim ClaimTypeReferenceId="extension_Location" Required="false"/>
             <OutputClaim ClaimTypeReferenceId="postalCode" Required="true"/>
@@ -236,7 +236,7 @@
         <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
           <Metadata>
             <Item Key="setting.forgotPasswordLinkOverride">ForgotPasswordExchange</Item>
-            <Item Key="setting.showSignupLink">false</Item>
+            <Item Key="setting.showSignupLink">true</Item>
           </Metadata>
         </TechnicalProfile>
 
@@ -270,6 +270,26 @@
             <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
           </OutputClaims>
         </TechnicalProfile>
+
+        <TechnicalProfile Id="SelfAsserted-PasswordResetUserMessage">
+          <DisplayName>Password reset</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <!-- Hide the continue and cancel buttons -->
+            <Item Key="setting.showContinueButton">false</Item>
+            <Item Key="setting.showCancelButton">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userMessage" DefaultValue="Your password has been successfully updated." />
+          </InputClaims>
+          <OutputClaims>
+            <!-- Show the paragraph claim with the message to the user -->
+            <OutputClaim ClaimTypeReferenceId="userMessage" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
         <!--Edit profile page-->
         <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
           <InputClaims>
@@ -586,9 +606,35 @@
         <OrchestrationStep Order="9" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       
       </OrchestrationSteps>
-       
 
+      <ClientDefinition ReferenceId="DefaultWeb" />
 
+    </UserJourney>
+
+    <UserJourney Id="PasswordReset">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Blocks the user from issuing the access token, by calling the self asserted page without continue button-->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="BlockSendClaims" TechnicalProfileReferenceId="SelfAsserted-PasswordResetUserMessage" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
 
