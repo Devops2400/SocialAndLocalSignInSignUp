@@ -141,7 +141,7 @@
     <!--Sample: Set a emptyClaim value-->
     <ClaimsTransformation Id="CreateEmptyClaimValue" TransformationMethod="CreateStringClaim">
       <InputParameters>
-        <InputParameter Id="value" DataType="string" Value="yes" />
+        <InputParameter Id="value" DataType="string" Value="Delete my account" />
       </InputParameters>
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="emptyClaim" TransformationClaimType="createdClaim" />
@@ -149,9 +149,9 @@
     </ClaimsTransformation>
 
     <ClaimsTransformation Id="GenerateBody" TransformationMethod="GenerateJson">
-      <InputClaims>
+      <!-- <InputClaims>
         <InputClaim ClaimTypeReferenceId="displayName" />
-        <InputClaim ClaimTypeReferenceId="displayName" />
+        <InputClaim ClaimTypeReferenceId="givenName" />
         <InputClaim ClaimTypeReferenceId="surname" />
         <InputClaim ClaimTypeReferenceId="email" />
         <InputClaim ClaimTypeReferenceId="extension_Location" />
@@ -160,7 +160,14 @@
         <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
         <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
         <InputClaim ClaimTypeReferenceId="objectId" />
-      </InputClaims>
+      </InputClaims> -->
+      <InputParameters>
+          <InputParameter Id="full_name" DataType="string" Value="test"/>
+          <InputParameter Id="first_name" DataType="string" Value="sit"/>
+          <InputParameter Id="last_name" DataType="string" Value="dev"/>
+          <InputParameter Id="email_address_1" DataType="string" Value="testdev@gmail.com"/>
+          <InputParameter Id="from.email" DataType="string" Value="my email"/>
+        </InputParameters>
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="requestBodyPayload" TransformationClaimType="outputClaim"/>
       </OutputClaims>
@@ -228,7 +235,7 @@
           <DisplayName>Forgot your password?</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="true" AlwaysUseDefaultValue="true"/>
+            <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="true" AlwaysUseDefaultValue="false"/>
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -475,6 +482,7 @@
             <Item Key="ServiceUrl">https://api-pre-we-ad365apimanager-1.azure-api.net/dynamics/v4/prospects/UpdateProspectInDynamics</Item>
             <Item Key="AuthenticationType">ApiKeyHeader</Item>
             <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="ClaimUsedForRequestPayload">requestBodyPayload</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="Ocp-Apim-Subscription-Key" StorageReferenceId="B2C_1A_RestApiKey" />
