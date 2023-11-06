@@ -207,7 +207,7 @@
         <!--Local account sign-up page-->
         <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
           <Metadata>
-            <Item Key="EnforceEmailVerification">false</Item>
+            <Item Key="EnforceEmailVerification">true</Item>
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
@@ -611,7 +611,7 @@
 
     </UserJourney>
 
-    <UserJourney Id="PasswordReset">
+     <UserJourney Id="PasswordReset">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
