@@ -118,7 +118,7 @@
         <DisplayName>Subject</DisplayName>
         <DataType>string</DataType>
         <DefaultPartnerClaimTypes>
-          <Protocol Name="OpenIdConnect" PartnerClaimType="sub" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="contant_azure_id" />
         </DefaultPartnerClaimTypes>
         <UserHelpText/>
       </ClaimType>
