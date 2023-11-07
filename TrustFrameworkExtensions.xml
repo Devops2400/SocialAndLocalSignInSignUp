@@ -473,25 +473,35 @@
     </ClaimsProvider>
 
     <ClaimsProvider>
-      <DisplayName>API call</DisplayName>
+      <DisplayName>Function App call</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="ApiCall">
-          <DisplayName>Send user related data to Dynamics</DisplayName>
+          <DisplayName>Send user related data to Func App</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://api-pre-we-ad365apimanager-1.azure-api.net/dynamics/v4/prospects/UpdateProspectInDynamics</Item>
-            <Item Key="AuthenticationType">ApiKeyHeader</Item>
+            <Item Key="ServiceUrl">https://btocfunction.azurewebsites.net/api/http_trigger?code=uCjK2xHI9XFkH2Pbpatrx_TckIlshHYBjr-7EEAuHk3oAzFuTFnzTA==</Item>
+            <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="HttpMethod">POST</Item>
             <Item Key="ClaimUsedForRequestPayload">requestBodyPayload</Item>
           </Metadata>
-          <CryptographicKeys>
+          <!-- <CryptographicKeys>
             <Key Id="Ocp-Apim-Subscription-Key" StorageReferenceId="B2C_1A_RestApiKey" />
-          </CryptographicKeys>
-          <InputClaimsTransformations>
+          </CryptographicKeys> -->
+          <!-- <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateBody" />
-          </InputClaimsTransformations>
+          </InputClaimsTransformations> -->
           <InputClaims>
-              <InputClaim ClaimTypeReferenceId="requestBodyPayload" />
+            <InputClaim ClaimTypeReferenceId="displayName" />
+            <InputClaim ClaimTypeReferenceId="givenName" />
+            <InputClaim ClaimTypeReferenceId="surname" />
+            <InputClaim ClaimTypeReferenceId="email" />
+            <InputClaim ClaimTypeReferenceId="extension_Location" />
+            <InputClaim ClaimTypeReferenceId="postalCode" />
+            <InputClaim ClaimTypeReferenceId="country" />
+            <InputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" />
+            <InputClaim ClaimTypeReferenceId="extension_PhoneNumber" />
+            <InputClaim ClaimTypeReferenceId="objectId" />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
