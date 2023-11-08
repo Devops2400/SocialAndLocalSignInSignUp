@@ -479,7 +479,7 @@
           <DisplayName>Send user related data to Func App</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://btocfunction.azurewebsites.net/api/http_trigger?code=uCjK2xHI9XFkH2Pbpatrx_TckIlshHYBjr-7EEAuHk3oAzFuTFnzTA==</Item>
+            <Item Key="ServiceUrl">https://new-btocfunctionapp.azurewebsites.net/api/CustomPolicy_http_trigger?code=hLcf3hNCtrTH7nX0XGjMGZflcZ6qSEqoeCls9rwJOnlpAzFu3143fQ==</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
             <Item Key="HttpMethod">POST</Item>
