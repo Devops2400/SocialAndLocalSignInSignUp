@@ -224,10 +224,10 @@
             <OutputClaim ClaimTypeReferenceId="givenName" Required="true"/>
             <OutputClaim ClaimTypeReferenceId="surname" Required="true"/>
             <OutputClaim ClaimTypeReferenceId="extension_Location" Required="false"/>
-            <OutputClaim ClaimTypeReferenceId="postalCode" Required="true"/>
-            <OutputClaim ClaimTypeReferenceId="country" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="postalCode" Required="false"/>
+            <OutputClaim ClaimTypeReferenceId="country" Required="false"/>
             <OutputClaim ClaimTypeReferenceId="extension_CommunicationPreferences" Required="false"/>
-            <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="extension_PhoneNumber" Required="false"/>
           </OutputClaims>
         </TechnicalProfile>
 
@@ -532,9 +532,9 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
+            <ClaimsExchange Id="ForgotPasswordExchange" TechnicalProfileReferenceId="ForgotPassword" />
             <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
-            <ClaimsExchange Id="ForgotPasswordExchange" TechnicalProfileReferenceId="ForgotPassword" />
           </ClaimsExchanges>
         </OrchestrationStep>
         
